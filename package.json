@@ -1,0 +1,44 @@
+{
+  "name": "vue3-wizard",
+  "version": "0.0.6",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/vue3-wizard.umd.cjs",
+  "module": "./dist/vue3-wizard.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue3-wizard.js",
+      "require": "./dist/vue3-wizard.umd.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.0"
+  },
+  "description": "<h1 align=\"center\">Vue3 wizard</h1> <h4 align=\"center\">now: only vertical</h4>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/6y6jlb/vue3-wizard.git"
+  },
+  "keywords": [
+    "vue3",
+    "wizard"
+  ],
+  "author": "https://github.com/6y6jlb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/6y6jlb/vue3-wizard/issues"
+  },
+  "homepage": "https://github.com/6y6jlb/vue3-wizard#readme"
+}
