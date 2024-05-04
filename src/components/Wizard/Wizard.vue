@@ -11,10 +11,6 @@ export default {
 			type: Number,
 			default: 1,
 		},
-		size: {
-			type: String,
-			default: "1.4rem",
-		},
 	},
 
 	setup(props) {
@@ -36,7 +32,6 @@ export default {
 
 		onMounted(() => {
 			updateFirstUnfilledElementOffset()
-			document.getElementById("vue-wizard-wrapper")?.style.setProperty("--step-size", props.size)
 		})
 
 		return { filledLineSize, mappedSteps, props }
@@ -63,22 +58,25 @@ export default {
 
 <style scoped>
 .vue-wizard-wrapper {
-	--step-size: 1.4em;
-
-	--wizard-disabled-color: var(--secondary, lightGray);
-	--wizard-primary-color: var(--primary, CornflowerBlue);
-	--wizard-step-background-color: white;
-	--wizard-point-outer-size: calc(var(--step-size) * 1.6);
-	--wizard-nested-point-size: calc(var(--step-size) * 0.3);
-	--wizard-line-width: max(calc(var(--step-size) * 0.2), 0.2em);
-	--wizard-line-offset: calc(var(--wizard-point-outer-size) / 2 - var(--wizard-line-width) / 2);
-	--wizard-border-width: max(2px, calc(var(--step-size) * 0.2));
-	--wizard-gap: max(1em, var(--step-size));
+	--wizard-step-size: var(--wizard-redefined-step-size, 1.4em);
+	--wizard-disabled-color: var(--wizard-redifined-disabled-color, lightGray);
+	--wizard-primary-color: var(--wizard-redifined-primary-color, CornflowerBlue);
+	--wizard-step-bg-color: var(--wizard-redifined-step-bg-color, white);
+	--wizard-point-outer-size: var(--wizard-redifined-point-outer-size, calc(var(--wizard-step-size) * 1.6));
+	--wizard-nested-point-size: var(--wizard-redifined-nested-point-size, calc(var(--wizard-step-size) * 0.3));
+	--wizard-line-width: var(--wizard-redifined-line-width, max(calc(var(--wizard-step-size) * 0.2), 0.2em));
+	--wizard-line-offset: var(
+		--wizard-redifined-line-offset,
+		calc(var(--wizard-point-outer-size) / 2 - var(--wizard-line-width) / 2)
+	);
+	--wizard-border-width: var(--wizard-redifined-border-width, max(2px, calc(var(--wizard-step-size) * 0.2)));
+	--wizard-gap: var(--wizard-redifined-gap, max(1em, var(--wizard-step-size)));
 
 	gap: var(--wizard-gap);
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	transition: all ease-in-out 0.3s;
 }
 
 .vue-wizard-wrapper .line {
@@ -88,6 +86,7 @@ export default {
 	top: 0;
 	height: 100%;
 	z-index: 0;
+	transition: height ease-in-out 0.4s;
 }
 
 .vue-wizard-wrapper .primary.line {
@@ -119,19 +118,16 @@ export default {
 	border: var(--wizard-border-width) solid var(--wizard-primary-color);
 }
 
-.vue-wizard-wrapper .step.filled .point:after {
-	display: block;
-}
-
 .vue-wizard-wrapper .step.filled .label {
 	color: var(--wizard-primary-color);
+	transition: color ease-in-out 0.5s;
 }
 
 .vue-wizard-wrapper .step .point {
 	width: var(--wizard-point-outer-size);
 	height: var(--wizard-point-outer-size);
 	border-radius: 50%;
-	background-color: var(--wizard-step-background-color);
+	background-color: var(--wizard-step-bg-color);
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -140,26 +136,33 @@ export default {
 
 .vue-wizard-wrapper .step .point:after {
 	content: "";
-	display: none;
-	width: var(--wizard-nested-point-size);
-	height: var(--wizard-nested-point-size);
+	display: block;
+	width: 0;
+	height: 0;
 	border-radius: 50%;
 	background-color: var(--wizard-primary-color);
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	transition: all ease-in-out 0.5s;
+}
+
+.vue-wizard-wrapper .step.filled .point:after {
+	width: var(--wizard-nested-point-size);
+	height: var(--wizard-nested-point-size);
 }
 
 .vue-wizard-wrapper .step .point:before {
 	content: "";
-	width: var(--step-size);
-	height: var(--step-size);
+	width: var(--wizard-step-size);
+	height: var(--wizard-step-size);
 	border-radius: 50%;
-	background-color: var(--wizard-step-background-color);
+	background-color: var(--wizard-step-bg-color);
 	border: var(--wizard-border-width) solid var(--wizard-disabled-color);
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: all ease-in-out 0.5s;
 }
 </style>
