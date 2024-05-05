@@ -15,9 +15,8 @@ npm install vue3-wizard --save
 yarn add vue3-wizard
 ```
 
-![assets/simple-example-vue3-wizard.png)
+![simple-example-vue3-wizard](https://github.com/6y6jlb/vue3-wizard/assets/76783827/7c3d9c4a-b406-45e0-8e88-7194d40559ff)
 
-![assets/simple-example-vue3-wizard.gif)
 
 ## Simple example
 
