@@ -11,6 +11,11 @@ export default {
 			type: Number,
 			default: 1,
 		},
+		orientation: {
+			type: String,
+			default: "vertical",
+			validator: (value) => ["vertical", "horizontal"].includes(value),
+		},
 	},
 
 	setup(props) {
@@ -19,12 +24,23 @@ export default {
 
 		const updateFirstUnfilledElementOffset = () => {
 			const firstUnfilledStep = document.getElementById(`${props.step + 1}-step`)
+			console.log("document.getElementById('" + (props.step + 1) + "-step')")
 			let offset = 0
-			if (firstUnfilledStep) {
-				offset = firstUnfilledStep.offsetTop + firstUnfilledStep.offsetHeight / 2
-			} else {
-				offset = document.getElementById("vue-wiard-wrapper")?.offsetHeight
+			if (props.orientation === "horizontal") {
+				if (firstUnfilledStep) {
+					offset = firstUnfilledStep.offsetLeft + firstUnfilledStep.offsetWidth / 2
+				} else {
+					offset = document.getElementById("vue-wizard-wrapper")?.offsetWidth
+				}
 			}
+			if (props.orientation === "vertical") {
+				if (firstUnfilledStep) {
+					offset = firstUnfilledStep.offsetTop + firstUnfilledStep.offsetHeight / 2
+				} else {
+					offset = document.getElementById("vue-wizard-wrapper")?.offsetHeight
+				}
+			}
+			console.log(offset)
 			filledLineSize.value = offset
 		}
 
@@ -40,8 +56,11 @@ export default {
 </script>
 
 <template>
-	<div class="vue-wizard-wrapper" id="vue-wizard-wrapper">
-		<div class="primary line" :style="{ height: `${filledLineSize}px` }"></div>
+	<div class="vue-wizard-wrapper" :class="{ horizontal: orientation === 'horizontal' }" id="vue-wizard-wrapper">
+		<div
+			class="primary line"
+			:style="{ [orientation === 'vertical' ? 'height' : 'width']: `${filledLineSize}px` }"
+		></div>
 		<div class="secondary line"></div>
 		<div
 			v-for="item of mappedSteps"
@@ -57,6 +76,8 @@ export default {
 </template>
 
 <style scoped>
+/* wrapper */
+
 .vue-wizard-wrapper {
 	--wizard-step-size: var(--wizard-redefined-step-size, 1.4em);
 	--wizard-disabled-color: var(--wizard-redifined-disabled-color, lightGray);
@@ -79,33 +100,74 @@ export default {
 	transition: all ease-in-out 0.3s;
 }
 
+.vue-wizard-wrapper.horizontal {
+	flex-direction: row;
+}
+
+/* line */
+
 .vue-wizard-wrapper .line {
-	width: var(--wizard-line-width);
 	position: absolute;
+	z-index: 0;
+	transition: all ease-in-out 0.4s;
+}
+
+.vue-wizard-wrapper:not(.horizontal) .line {
+	width: var(--wizard-line-width);
 	left: var(--wizard-line-offset);
 	top: 0;
 	height: 100%;
-	z-index: 0;
-	transition: height ease-in-out 0.4s;
+}
+
+.vue-wizard-wrapper.horizontal .line {
+	height: var(--wizard-line-width);
+	top: var(--wizard-line-offset);
+	left: 0;
+	width: 100%;
 }
 
 .vue-wizard-wrapper .primary.line {
 	background-color: var(--wizard-primary-color);
-	height: 0%;
 	z-index: 1;
+}
+
+.vue-wizard-wrapper.horizontal .primary.line {
+	width: var(--wizard-line-length);
+}
+
+.vue-wizard-wrapper:not(.horizontal) .primary.line {
+	height: var(--wizard-line-length);
 }
 
 .vue-wizard-wrapper .secondary.line {
 	background-color: var(--wizard-disabled-color);
 }
 
+/* step */
+
 .vue-wizard-wrapper .step {
 	display: grid;
-	grid-template-columns: min-content 1fr;
 	gap: 1rem;
 	z-index: 2;
 	align-items: center;
+	max-width: var(--wizard-redifined-step-width, fit-content);
+}
+
+.vue-wizard-wrapper:not(.horizontal) .step {
+	grid-template-columns: min-content 1fr;
 	justify-items: baseline;
+}
+
+.vue-wizard-wrapper.horizontal .step {
+	grid-template-rows: min-content 1fr;
+	justify-items: center;
+	align-items: baseline;
+}
+
+/* label */
+
+.vue-wizard-wrapper.horizontal .step .label {
+	text-align: center;
 }
 
 .vue-wizard-wrapper .step .label {
@@ -114,13 +176,15 @@ export default {
 	color: var(--wizard-disabled-color);
 }
 
-.vue-wizard-wrapper .step.filled .point:before {
-	border: var(--wizard-border-width) solid var(--wizard-primary-color);
-}
-
 .vue-wizard-wrapper .step.filled .label {
 	color: var(--wizard-primary-color);
 	transition: color ease-in-out 0.5s;
+}
+
+/* point */
+
+.vue-wizard-wrapper .step.filled .point:before {
+	border: var(--wizard-border-width) solid var(--wizard-primary-color);
 }
 
 .vue-wizard-wrapper .step .point {
