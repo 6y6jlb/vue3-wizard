@@ -1,5 +1,5 @@
-<h1 align="center">Vue3 wizard</h1>
-<h4 align="center">now: only vertical</h4>
+## Vue3 wizard
+#### Simple wizard with vertical and horizontal orientation
 
 ## Dependencies
 
@@ -15,7 +15,11 @@ npm install vue3-wizard --save
 yarn add vue3-wizard
 ```
 
-![simple-example-vue3-wizard](https://github.com/6y6jlb/vue3-wizard/assets/76783827/7c3d9c4a-b406-45e0-8e88-7194d40559ff)
+![image](https://github.com/6y6jlb/vue3-wizard/assets/76783827/0e32b424-eb06-4c80-b334-3e852b4e8920)
+
+![image](https://github.com/6y6jlb/vue3-wizard/assets/76783827/442b3675-de86-4cce-8dc3-db38fccde63d)
+
+
 
 
 ## Simple example
@@ -91,6 +95,7 @@ const formData = ref({ name: "", age: 18, question: "yes" });
 
 ```bash
 .vue-wizard-wrapper {
+    --wizard-redifined-step-width: 10rem
     --wizard-redifined-step-size: 2rem;
     --wizard-redifined-disabled-color: red;
     --wizard-redifined-primary-color: green;
